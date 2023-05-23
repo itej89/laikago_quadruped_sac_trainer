@@ -1,3 +1,5 @@
+# Code still in development. . .
+
 # Training Laikago Quadruped using Maximum entropy Soft-Actor-Critic neural network
 
 # Instructions 
