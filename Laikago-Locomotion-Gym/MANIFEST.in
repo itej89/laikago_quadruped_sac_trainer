@@ -1,0 +1,3 @@
+include laikago_locomotion/resources/data/*.*
+include laikago_locomotion/resources/data/laikago/*.*
+include tests/*.*

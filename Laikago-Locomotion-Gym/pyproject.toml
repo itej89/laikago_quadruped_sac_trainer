@@ -1,0 +1,18 @@
+[build-system]
+requires = ["setuptools>=61.0", 'gym', 'pybullet', 'numpy', 'matplotlib']
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "laikago-gym"
+version = "0.0.1"
+authors = [
+  { name="Tej Kiran", email="itej89@gmail.com" },
+]
+description = "Laikago Quadruped dog for OpenAI Gym"
+readme = "README.md"
+requires-python = ">=3.9"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: GNU General Public License (GPLv3)",
+    "Operating System :: OS Independent",
+]

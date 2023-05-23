@@ -1,0 +1,10 @@
+Metadata-Version: 2.1
+Name: laikago-gym
+Version: 0.0.1
+Summary: Laikago Quadruped dog for OpenAI Gym
+Author-email: Tej Kiran <itej89@gmail.com>
+Classifier: Programming Language :: Python :: 3
+Classifier: License :: OSI Approved :: GNU General Public License (GPLv3)
+Classifier: Operating System :: OS Independent
+Requires-Python: >=3.9
+Description-Content-Type: text/markdown
