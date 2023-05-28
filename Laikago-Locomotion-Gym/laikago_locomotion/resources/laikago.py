@@ -1,6 +1,7 @@
 import pybullet as p
 import os
 import math
+import numpy as np
 
 from laikago_locomotion.resources.joint_info import *
 
@@ -70,13 +71,23 @@ class Laikago:
         p.setJointMotorControl2(self.laikago,self.RL_LOWER.id,p.POSITION_CONTROL,self.RL_LOWER.direction*RL_LOWER_Action+self.RL_LOWER.offset, force=self.RL_LOWER.maxforce)
         
 
-    def get_observation(self):
+    def get_observation(self,verbose=0):
         # Get the position and orientation of the laikago in the simulation
         pos, ang = p.getBasePositionAndOrientation(self.laikago, self.client)
         ang = p.getEulerFromQuaternion(ang)
         vel = p.getBaseVelocity(self.laikago, self.client)[0][0:2]
+        
+        # also get the position and velocity of all joints
+        info_list = p.getJointStates(self.laikago,self.client, np.arange(0, p.getNumJoints(self.laikago)))
+        jointPos = np.array([info[0] for info in info_list])
+        jointVel = np.array([info[1] for info in info_list])
+        jointReactionWrench = np.array([info[2] for info in info_list]) # can add the wrench later
+
         # Concatenate position, orientation, velocity
-        observation = (pos + ang + vel)
+        # observation = (pos + ang + vel)
+        observation = tuple(pos) + tuple(ang) + tuple(vel) + tuple(jointPos) + tuple(jointVel)
+        if verbose:
+            print('current observation:',observation)
 
         return observation
 
