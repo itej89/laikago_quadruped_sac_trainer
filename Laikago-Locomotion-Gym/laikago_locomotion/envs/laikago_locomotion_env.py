@@ -17,7 +17,8 @@ class LaikagoLocomotionEnv(gym.Env):
                  fwd_dist_buffer_sz=5,
                  fwd_vel_rwd_weight=1.0,
                  base_pose_rwd_weight=1.0,
-                 ctrl_rwd_weight=-1.0):
+                 ctrl_rwd_weight=-1.0,
+                 z_terminate_height=0.1):
         self.action_space = gym.spaces.box.Box(
             low=np.array( [0.000383, 0.626537, -1.748481, -0.267296, 0.532887, -1.739073, 0.0, 0.271603, -1.839862, -0.248888, 0.242691, -1.835604]),
             high=np.array([0.22933,  0.805074, -0.982286,  0.139305, 0.82714,  -0.954666, 0.277363, 1.324073, -0.942585, 0.133936, 1.301261, -0.92895]))
@@ -48,7 +49,7 @@ class LaikagoLocomotionEnv(gym.Env):
         
         self.client = p.connect(p.DIRECT)
         p.setGravity(0,0,-9.8, physicsClientId=self.client)
-        p.setTimeStep(1./500, physicsClientId=self.client)
+        p.setTimeStep(1./240, physicsClientId=self.client)
  
         self.laikago = None
         self.start = None
@@ -65,6 +66,10 @@ class LaikagoLocomotionEnv(gym.Env):
         self.fwd_vel_rwd_weight = fwd_vel_rwd_weight
         self.base_pose_rwd_weight = base_pose_rwd_weight
         self.ctrl_rwd_weight = ctrl_rwd_weight
+
+        print('Current reward weights:',np.round(self.fwd_vel_rwd_weight,2),np.round(self.base_pose_rwd_weight,2),np.round(self.ctrl_rwd_weight))
+
+        self.z_terminate_height = z_terminate_height
 
         # the quaternion of the initial pose
         self.q0 = p.getQuaternionFromEuler([np.pi/2,0,-np.pi])
@@ -83,7 +88,7 @@ class LaikagoLocomotionEnv(gym.Env):
         reward = self.compute_reward(laikago_ob,action)
 
         # Done by falling
-        if laikago_ob[3] <= 0:
+        if laikago_ob[2] <= self.z_terminate_height:
             self.done = True
 
         # Done by reaching goal
