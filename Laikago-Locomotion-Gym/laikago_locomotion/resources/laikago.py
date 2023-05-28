@@ -75,17 +75,19 @@ class Laikago:
         # Get the position and orientation of the laikago in the simulation
         pos, ang = p.getBasePositionAndOrientation(self.laikago, self.client)
         ang = p.getEulerFromQuaternion(ang)
-        vel = p.getBaseVelocity(self.laikago, self.client)[0][0:2]
+        vel = p.getBaseVelocity(self.laikago, self.client)
+        linearVel = vel[0]
+        angularVel = vel[1]
         
         # also get the position and velocity of all joints
-        info_list = p.getJointStates(self.laikago,self.client, np.arange(0, p.getNumJoints(self.laikago)))
+        info_list = p.getJointStates(self.laikago,np.arange(0, p.getNumJoints(self.laikago)),self.client)
         jointPos = np.array([info[0] for info in info_list])
         jointVel = np.array([info[1] for info in info_list])
         jointReactionWrench = np.array([info[2] for info in info_list]) # can add the wrench later
 
         # Concatenate position, orientation, velocity
         # observation = (pos + ang + vel)
-        observation = tuple(pos) + tuple(ang) + tuple(vel) + tuple(jointPos) + tuple(jointVel)
+        observation = tuple(pos) + tuple(ang) + tuple(linearVel) + tuple(angularVel) + tuple(jointPos) + tuple(jointVel)
         if verbose:
             print('current observation:',observation)
 

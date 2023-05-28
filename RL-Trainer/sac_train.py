@@ -16,6 +16,7 @@ if __name__ == '__main__':
     
     #Create agent
     input_dims = env.observation_space.shape
+    print("+++++",input_dims)
     agent = Agent(input_dims=input_dims, env=env,
               n_actions=env.action_space.shape[0],
              target_entropy=-env.action_space.shape[0],
