@@ -90,7 +90,7 @@ class LaikagoLocomotionEnv(gym.Env):
         # Done by falling
         if laikago_ob[2] <= self.z_terminate_height:
             self.done = True
-
+        
         # Done by reaching goal
         if dist_from_start > 100:
             self.done = True
