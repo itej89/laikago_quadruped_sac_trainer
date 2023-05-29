@@ -12,19 +12,25 @@ from tqdm import tqdm
 if __name__ == '__main__':
 
     #Create environment
-    env = gym.make('LaikagoLocomotion-v0')
+    env = gym.make('LaikagoLocomotion-v0',
+                   fwd_dist_buffer_sz=5,
+                   fwd_vel_rwd_weight=10.0,
+                   base_pose_rwd_weight=0.0,
+                   ctrl_rwd_weight=0.0,
+                   z_terminate_height=0.1)
     
     #Create agent
     input_dims = env.observation_space.shape
     agent = Agent(input_dims=input_dims, env=env,
               n_actions=env.action_space.shape[0],
              target_entropy=-env.action_space.shape[0],
-             alpha_lr=1e-5)
-    
+             alpha_lr=1e-7)
+    print('alpha learning rate is:',agent.alpha_optimizer.learning_rate)
 
     #Training variables----------------------------
     #Total number of epochs
     TOTAL_EPOCHS = 1000
+    MAX_EPOCH_LENGTH = 2000
 
     #To save the best network
     best_score = env.reward_range[0]
@@ -40,11 +46,11 @@ if __name__ == '__main__':
 
     #Collect samples before starting to trian the network-------------------
     #This helps in avoiding getting stuck in a local minima-----------------
-    for i in tqdm(range(50), desc="Collecting random samples  :"):
+    for i in tqdm(range(500), desc="Collecting random samples  :"):
         observation = env.reset()
         done = False
         count = 0
-        while not done and count < 500:
+        while not done and count < 1000:
             count += 1
             action = agent.choose_random_action()
             new_observation, reward, done, info = env.step(action)
@@ -88,6 +94,10 @@ if __name__ == '__main__':
 
                             #upodate the observation 
                             observation = new_observation
+
+                            # terminate if reach max length
+                            if count>=MAX_EPOCH_LENGTH:
+                                done = 1
                         
                         #write the alpha and score int othe files
                         fReward.write(f"\n{episodeReward}")
