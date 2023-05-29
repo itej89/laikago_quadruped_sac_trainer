@@ -44,6 +44,18 @@ class Laikago:
         # FR_HIP = joint_info("FL_TOE",   7,  -1, 0, maxforce)
         # FR_HIP = joint_info("RR_TOE",   11, -1, 0, maxforce)
         # FR_HIP = joint_info("RL_TOE",   15,  1, 0, maxforce)
+        p.enableJointForceTorqueSensor(self.laikago, self.FR_HIP.id, 1, physicsClientId=client)
+        p.enableJointForceTorqueSensor(self.laikago, self.FR_UPPER.id, 1, physicsClientId=client)
+        p.enableJointForceTorqueSensor(self.laikago, self.FR_LOWER.id, 1, physicsClientId=client)
+        p.enableJointForceTorqueSensor(self.laikago, self.FL_HIP.id, 1, physicsClientId=client)
+        p.enableJointForceTorqueSensor(self.laikago, self.FL_UPPER.id, 1, physicsClientId=client)
+        p.enableJointForceTorqueSensor(self.laikago, self.FL_LOWER.id, 1, physicsClientId=client)
+        p.enableJointForceTorqueSensor(self.laikago, self.RR_HIP.id, 1, physicsClientId=client)
+        p.enableJointForceTorqueSensor(self.laikago, self.RR_UPPER.id, 1, physicsClientId=client)
+        p.enableJointForceTorqueSensor(self.laikago, self.RR_LOWER.id, 1, physicsClientId=client)
+        p.enableJointForceTorqueSensor(self.laikago, self.RL_HIP.id, 1, physicsClientId=client)
+        p.enableJointForceTorqueSensor(self.laikago, self.RL_UPPER.id, 1, physicsClientId=client)
+        p.enableJointForceTorqueSensor(self.laikago, self.RL_LOWER.id, 1, physicsClientId=client)   
         
         self.enable_collsion()        
 
